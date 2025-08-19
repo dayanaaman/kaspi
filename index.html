@@ -8,249 +8,109 @@
 
   <!-- Иконка для iPhone -->
   <link rel="apple-touch-icon" href="kaspi_icon.png">
+
+  <!-- Открытие без Safari-оболочки -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Kaspi ID">
+  <meta name="apple-mobile-web-app-title" content="KaspiID">
 
-  <!-- Для Android/Chrome -->
+  <!-- Manifest для Android -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#ffffff">
 
   <style>
     body {
-      margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #fff;
-      color: #000;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
     }
-    .tabs {
+
+    .header {
       display: flex;
-      justify-content: space-around;
+      justify-content: center;
+      padding: 10px;
+      background: white;
       border-bottom: 1px solid #ddd;
     }
+
     .tab {
       flex: 1;
       text-align: center;
-      padding: 12px;
-      font-weight: 500;
-      color: #000;
+      padding: 10px;
+      font-size: 16px;
       cursor: pointer;
+      color: black;
     }
+
     .tab.active {
-      border-bottom: 2px solid #007aff;
-      font-weight: 600;
+      font-weight: bold;
     }
-    .content { padding: 15px; }
+
+    .content {
+      padding: 20px;
+    }
+
+    .photo-container {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .photo {
+      max-width: 250px;
+      border-radius: 12px;
+    }
+
     .btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      margin: 10px auto;
       padding: 12px;
       border-radius: 12px;
-      font-size: 16px;
-      margin: 8px 0;
       text-decoration: none;
-    }
-    .btn-primary {
-      background: #007aff;
-      color: #fff;
-    }
-    .btn-outline {
-      border: 1px solid #ccc;
-      color: #000;
-      background: #fff;
-    }
-    .photo-container {
-      width: 100%;
-      height: 400px;
-      overflow: hidden;
-      position: relative;
-      border-radius: 12px;
-      margin-bottom: 10px;
-    }
-    .photo-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-    input, button {
-      width: 100%;
-      padding: 12px;
       font-size: 16px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      margin-bottom: 10px;
+      width: 90%;
     }
-    button {
-      background: #007aff;
-      color: #fff;
-      border: none;
-      font-weight: 500;
-      cursor: pointer;
+
+    .btn-primary {
+      background: #e30613;
+      color: white;
     }
-    /* затемнённый фон */
-    .modal {
-      display: none;
-      position: fixed;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.2);
-      z-index: 1000;
+
+    .btn-outline {
+      border: 1px solid #ddd;
+      background: white;
+      color: black;
     }
-    /* модалка снизу */
-    .modal-content {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 45%;
-      background: #fff;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    }
-    .close {
-      position: absolute;
-      right: 15px;
-      top: 10px;
-      font-size: 24px;
-      cursor: pointer;
+
+    .btn-icon {
+      width: 20px;
+      margin-right: 8px;
     }
   </style>
 </head>
 <body>
-
-  <!-- Вкладки -->
-  <div class="tabs">
-    <div class="tab active" onclick="openTab('info', this)">Реквизиты</div>
-    <div class="tab" onclick="openTab('doc', this)">Документ</div>
+  <div class="header">
+    <div class="tab active">Документ</div>
+    <div class="tab">Реквизиты</div>
   </div>
 
-  <!-- Реквизиты -->
-  <div id="info" class="content">
-    <div id="infoForm">
-      <input id="fio" placeholder="ФИО">
-      <input id="iin" placeholder="ИИН">
-      <label>Дата рождения:</label>
-      <input id="dob" type="date">
-      <input id="docnum" placeholder="Номер документа">
-      <label>Дата выдачи:</label>
-      <input id="issued" type="date">
-      <label>Срок действия:</label>
-      <input id="expiry" type="date">
-      <button onclick="finalize()">Сохранить</button>
+  <div class="content">
+    <div class="photo-container">
+      <img src="5194971353961328439.jpg" alt="Документ" class="photo" />
     </div>
 
-    <div id="infoView" style="display:none; text-align:left; font-size:16px; line-height:1.6;">
-      <p><b>ФИО:</b> <span id="viewFio"></span></p>
-      <p><b>ИИН:</b> <span id="viewIin"></span></p>
-      <p><b>Дата рождения:</b> <span id="viewDob"></span></p>
-      <p><b>Номер документа:</b> <span id="viewDocnum"></span></p>
-      <p><b>Дата выдачи:</b> <span id="viewIssued"></span></p>
-      <p><b>Срок действия:</b> <span id="viewExpiry"></span></p>
-      <button onclick="editInfo()">Редактировать</button>
-    </div>
+    <a href="#" class="btn btn-primary">
+      <img src="icon.png" alt="" class="btn-icon">
+      Предъявить документ
+    </a>
+    
+    <a href="#" class="btn btn-outline">
+      <img src="imgbin.png" alt="" class="btn-icon">
+      Отправить документ
+    </a>
   </div>
-
-  <!-- Документ -->
-  <div id="doc" class="content" style="display:none;">
-    <div class="photo-container" id="photoContainer">
-      <input type="file" id="upload" accept="image/*" onchange="loadPhoto(event)">
-      <img id="docPhoto" style="display:none;">
-    </div>
-    <a href="#" class="btn btn-primary" onclick="openModal()">Предъявить документ</a>
-    <a href="#" class="btn btn-outline">Отправить документ</a>
-  </div>
-
-  <!-- Модалка -->
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">×</span>
-      <div style="text-align:left; font-weight:bold; font-size:18px; margin-bottom:20px;">
-        Удостоверение личности
-      </div>
-      <div style="text-align:center; font-size:14px; margin-bottom:20px;">
-        Покажите QR-код сотруднику
-      </div>
-      <div style="text-align:center; margin-bottom:15px;">
-        <img src="QR.png" style="width:150px; height:150px; object-fit:cover; border-radius:10px;">
-      </div>
-      <div style="text-align:center; font-size:14px; margin-bottom:10px;">
-        или скажите код
-      </div>
-      <div style="text-align:center; font-weight:bold; font-size:24px;">
-        803558
-      </div>
-    </div>
-  </div>
-
-  <script>
-    function openTab(tabId, el) {
-      document.querySelectorAll(".content").forEach(c=>c.style.display="none");
-      document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-      document.getElementById(tabId).style.display="block";
-      el.classList.add("active");
-    }
-
-    function formatDate(dateStr) {
-      if (!dateStr) return "";
-      const d = new Date(dateStr);
-      if (isNaN(d)) return dateStr;
-      return String(d.getDate()).padStart(2,"0")+"."+String(d.getMonth()+1).padStart(2,"0")+"."+d.getFullYear();
-    }
-
-    function finalize() {
-      ["fio","iin","dob","docnum","issued","expiry"].forEach(id=>{
-        let val=document.getElementById(id).value;
-        if(val) localStorage.setItem(id,val);
-      });
-      document.getElementById("viewFio").textContent=localStorage.getItem("fio")||"";
-      document.getElementById("viewIin").textContent=localStorage.getItem("iin")||"";
-      document.getElementById("viewDob").textContent=formatDate(localStorage.getItem("dob"));
-      document.getElementById("viewDocnum").textContent=localStorage.getItem("docnum")||"";
-      document.getElementById("viewIssued").textContent=formatDate(localStorage.getItem("issued"));
-      document.getElementById("viewExpiry").textContent=formatDate(localStorage.getItem("expiry"));
-      document.getElementById("infoForm").style.display="none";
-      document.getElementById("infoView").style.display="block";
-    }
-
-    function editInfo() {
-      document.getElementById("infoForm").style.display="block";
-      document.getElementById("infoView").style.display="none";
-    }
-
-    function loadPhoto(event){
-      const file=event.target.files[0];
-      if(file){
-        const reader=new FileReader();
-        reader.onload=function(e){
-          document.getElementById("docPhoto").src=e.target.result;
-          document.getElementById("docPhoto").style.display="block";
-          localStorage.setItem("docPhoto", e.target.result);
-          document.getElementById("upload").style.display="none";
-        }
-        reader.readAsDataURL(file);
-      }
-    }
-
-    function openModal(){ document.getElementById("modal").style.display="block"; }
-    function closeModal(){ document.getElementById("modal").style.display="none"; }
-
-    window.onload=function(){
-      let saved=false;
-      ["fio","iin","dob","docnum","issued","expiry"].forEach(id=>{
-        let val=localStorage.getItem(id);
-        if(val){ document.getElementById(id).value=val; saved=true; }
-      });
-      if(saved) finalize();
-      let savedPhoto=localStorage.getItem("docPhoto");
-      if(savedPhoto){
-        document.getElementById("docPhoto").src=savedPhoto;
-        document.getElementById("docPhoto").style.display="block";
-        document.getElementById("upload").style.display="none";
-      }
-    }
-  </script>
 </body>
 </html>
