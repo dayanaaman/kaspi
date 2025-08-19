@@ -1,115 +1,198 @@
-<canvas id="qrCanvas" class="qr" width="220" height="220" aria-label="QR"></canvas>
-        <div class="code-label">или скажите код</div>
-        <div id="numericCode" class="code">803558</div>
-      </div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Удостоверение личности</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: #fff;
+      color: #000;
+    }
+    header {
+      background-color: #f9f9f9;
+      padding: 12px 0;
+      text-align: center;
+      font-size: 17px;
+      font-weight: 600;
+      border-bottom: 0.5px solid #ccc;
+      position: relative;
+    }
+    .back-arrow {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      font-weight: 400;
+      color: #007aff;
+      cursor: pointer;
+    }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin: 16px auto;
+      width: 90%;
+      background: #f2f2f7;
+      border-radius: 10px;
+      padding: 4px;
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 6px 0;
+      font-size: 15px;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #000; /* всегда черный */
+    }
+    .tab.active {
+      background: #fff;
+      color: #000;
+      font-weight: 600;
+    }
+    .content {
+      padding: 20px;
+      background-color: #fff;
+      min-height: calc(100vh - 120px);
+    }
+    .photo-container {
+      width: 100%;
+      height: 400px;
+      overflow: hidden;
+      position: relative;
+      touch-action: none;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+    .photo {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: contain;
+    }
+    .btn {
+      display: block;
+      width: 90%;
+      margin: 10px auto;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 500;
+      text-align: center;
+      text-decoration: none;
+    }
+    .btn-primary { background: #007aff; color: #fff; }
+    .btn-outline { border: 1px solid #c7c7cc; color: #007aff; background: #fff; }
+
+    /* --- Модалка снизу --- */
+    .modal {
+      position: fixed;
+      left: 0; right: 0;
+      bottom: -100%;
+      height: 45vh; /* 45% экрана */
+      background: #fff;
+      border-radius: 20px 20px 0 0;
+      box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+      transition: bottom 0.3s ease;
+      z-index: 1001;
+      padding: 20px;
+    }
+    .modal.show {
+      bottom: 0;
+    }
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.15); /* лёгкое затемнение */
+      display: none;
+      z-index: 1000;
+    }
+    .overlay.show {
+      display: block;
+    }
+    .modal .close {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      font-size: 28px;
+      cursor: pointer;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="back-arrow" onclick="window.history.back()">‹</div>
+    Удостоверение личности
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('doc')">Документ</div>
+    <div class="tab" onclick="showTab('info')">Реквизиты</div>
+  </div>
+
+  <!-- Документ -->
+  <div id="doc" class="content">
+    <div class="photo-container" id="photoContainer">
+      <img src="5194971353961328439.jpg" alt="Документ" class="photo" />
+    </div>
+
+    <!-- Кнопки -->
+    <a href="#" class="btn btn-primary" onclick="openModal()">Предъявить документ</a>
+    <a href="#" class="btn btn-outline">Отправить документ</a>
+  </div>
+
+  <!-- Реквизиты -->
+  <div id="info" class="content" style="display: none;">
+    <p>Тут твои реквизиты...</p>
+  </div>
+
+  <!-- Затемнение -->
+  <div class="overlay" id="overlay" onclick="closeModal()"></div>
+
+  <!-- Модалка -->
+  <div id="modal" class="modal">
+    <span class="close" onclick="closeModal()">×</span>
+    <div style="text-align:left; font-weight:600; font-size:18px; margin-bottom:20px;">
+      Удостоверение личности
+    </div>
+    <div style="text-align:center; font-size:14px; margin-bottom:20px;">
+      Покажите QR-код сотруднику
+    </div>
+    <div style="text-align:center; margin-bottom:15px;">
+      <img src="QR.png" alt="QR Code" style="width:150px; height:150px; border-radius:10px;">
+    </div>
+    <div style="text-align:center; font-size:14px; margin-bottom:10px;">
+      или скажите код
+    </div>
+    <div style="text-align:center; font-weight:bold; font-size:26px; letter-spacing:2px;">
+      803558
     </div>
   </div>
 
   <script>
-    // -------------------- ДАННЫЕ ПРИМЕРА --------------------
-    const data = {
-      iin: "031209601709",
-      dob: "09.12.2003",
-      docnum: "050260791",
-      issued: "01.03.2022",
-      expiry: "01.03.2032",
-      displayCode: "803558",               // числовой код в модалке
-      qrPayload: "IIN=031209601709;DOC=050260791;CODE=803558" // что кодируем в QR
-    };
-
-    // -------------------- РЕНДЕР РЕКВИЗИТОВ --------------------
-    function renderInfo({iin,dob,docnum,issued,expiry}){
-      const box = document.getElementById("info");
-      box.innerHTML = [
-        ["ИИН", iin],["Дата рождения", dob],["Номер документа", docnum],
-        ["Дата выдачи", issued],["Срок действия", expiry]
-      ].map(([label,value])=>`
-        <div class="info-item"><div class="info-label">${label}</div>
-          <div class="info-value">${value}</div>
-        </div>`).join("");
-    }
-    renderInfo(data);
-
-    // -------------------- ТАБЫ --------------------
-    const tabs = document.querySelectorAll(".tab");
-    tabs.forEach(t=>t.addEventListener("click", ()=>{
-      tabs.forEach(x=>x.classList.remove("active"));
-      t.classList.add("active");
-      document.getElementById("doc").style.display = t.dataset.tab==="doc"?"block":"none";
-      document.getElementById("req").style.display = t.dataset.tab==="req"?"block":"none";
-    }));
-
-    // -------------------- МОДАЛКА --------------------
-    const modal = document.getElementById("modal");
-    const openModalBtn = document.getElementById("openModalBtn");
-    const closeModalBtn = document.getElementById("closeModalBtn");
-    const numericCodeEl = document.getElementById("numericCode");
-    openModalBtn.addEventListener("click", ()=>{
-      numericCodeEl.textContent = data.displayCode;
-      drawQR(data.qrPayload); // генерим QR
-      modal.classList.add("show");
-      modal.setAttribute("aria-hidden","false");
-    });
-    closeModalBtn.addEventListener("click", closeModal);
-    modal.addEventListener("click", (e)=>{ if(e.target===modal) closeModal(); });
-    function closeModal(){
-      modal.classList.remove("show");
-      modal.setAttribute("aria-hidden","true");
+    // Переключение вкладок
+    function showTab(id) {
+      document.getElementById('doc').style.display = id === 'doc' ? 'block' : 'none';
+      document.getElementById('info').style.display = id === 'info' ? 'block' : 'none';
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelector(`.tab[onclick="showTab('${id}')"]`).classList.add('active');
     }
 
-    // -------------------- ПРОСТОЙ QR-РИСОВАЛЬЩИК (заглушка) --------------------
-    // Это НЕ настоящий QR-алгоритм, но выглядит как QR. Замените функцию drawQR()
-    // на библиотеку типа qrcode.js для настоящего сканируемого кода.
-    function drawQR(text){
-      const cvs = document.getElementById("qrCanvas");
-      const ctx = cvs.getContext("2d");
-      const N = 29;        // «разрешение» псевдо-матрицы
-      const cell = Math.floor((cvs.width)/N);
-
-      // белый фон
-      ctx.fillStyle = "#fff";
-      ctx.fillRect(0,0,cvs.width,cvs.height);
-
-      // «рамка» как на скрине
-      ctx.strokeStyle = "#000";
-      ctx.lineWidth = 10;
-      ctx.strokeRect(0,0,cvs.width,cvs.height);
-
-      // простая детерминированная «шахматка» на основе текста
-      let seed = 0;
-      for (let i=0;i<text.length;i++) seed = (seed*131 + text.charCodeAt(i))>>>0;
-
-      function rnd(){
-        seed ^= seed<<13; seed ^= seed>>>17; seed ^= seed<<5;
-        return (seed>>>0)/4294967295;
-      }
-
-      // три «поисковых» квадрата в углах (визуально как QR)
-      function finder(x,y){
-        ctx.fillStyle="#000"; ctx.fillRect(x,y,7*cell,7*cell);
-        ctx.fillStyle="#fff"; ctx.fillRect(x+cell,y+cell,5*cell,5*cell);
-        ctx.fillStyle="#000"; ctx.fillRect(x+2*cell,y+2*cell,3*cell,3*cell);
-      }
-      finder(1*cell,1*cell);
-      finder(cvs.width-8*cell,1*cell);
-      finder(1*cell,cvs.height-8*cell);
-
-      // заполняем матрицу псевдо-данными
-      ctx.fillStyle="#000";
-      for (let r=0;r<N;r++){
-        for (let c=0;c<N;c++){
-          // пропускаем зоны «поисковых» квадратов
-          const inFinder =
-            (r>=1 && r<8 && c>=1 && c<8) || (r>=1 && r<8 && c>=N-8 && c<N-1) ||
-            (r>=N-8 && r<N-1 && c>=1 && c<8);
-          if (inFinder) continue;
-          if (rnd() < 0.38) ctx.fillRect(c*cell, r*cell, cell, cell);
-        }
-      }
+    // Модалка
+    function openModal() {
+      document.getElementById("modal").classList.add("show");
+      document.getElementById("overlay").classList.add("show");
     }
-
-    // ---- Пример: открыть модалку по свайпу вниз на мобиле? (необязательно)
-    // Можно добавить, если нужно. Пока оставил базовую реализацию.
+    function closeModal() {
+      document.getElementById("modal").classList.remove("show");
+      document.getElementById("overlay").classList.remove("show");
+    }
   </script>
 </body>
 </html>
