@@ -100,7 +100,8 @@
     }
     .info-item { margin-bottom: 14px; }
     .info-label { font-size: 13px; color: #8e8e93; margin-bottom: 4px; }
-    .info-value { font-size: 16px; }
+    .info-value { font-size: 16px; display:flex; justify-content:space-between; }
+    .copy-icon { width:20px; height:20px; cursor:pointer; opacity:0.6; }
   </style>
 </head>
 <body>
@@ -116,44 +117,30 @@
 
   <!-- Документ -->
   <div id="doc" class="content">
-    <div class="photo-container" id="photoContainer">
-      <img src="" alt="Документ" class="photo" id="documentPhoto" />
+    <div id="uploadSection">
+      <div class="photo-container" id="photoContainer">
+        <img src="" alt="Документ" class="photo" id="documentPhoto" />
+      </div>
+      <input type="file" id="uploadPhoto" accept="image/*">
     </div>
-    <input type="file" id="uploadPhoto" accept="image/*">
-    <a href="#" class="btn btn-primary">Предъявить документ</a>
-    <a href="#" class="btn btn-outline">Отправить документ</a>
+    <div id="docButtons" style="display:none;">
+      <a href="#" class="btn btn-primary">Предъявить документ</a>
+      <a href="#" class="btn btn-outline">Отправить документ</a>
+    </div>
   </div>
 
   <!-- Реквизиты -->
   <div id="info" class="content" style="display: none;">
     <form id="infoForm">
-      <div class="info-item">
-        <div class="info-label">ФИО</div>
-        <input type="text" id="fio" placeholder="Введите ФИО">
-      </div>
-      <div class="info-item">
-        <div class="info-label">ИИН</div>
-        <input type="text" id="iin" placeholder="Введите ИИН">
-      </div>
-      <div class="info-item">
-        <div class="info-label">Дата рождения</div>
-        <input type="date" id="dob">
-      </div>
-      <div class="info-item">
-        <div class="info-label">Номер документа</div>
-        <input type="text" id="docnum" placeholder="Введите номер документа">
-      </div>
-      <div class="info-item">
-        <div class="info-label">Дата выдачи</div>
-        <input type="date" id="issued">
-      </div>
-      <div class="info-item">
-        <div class="info-label">Срок действия</div>
-        <input type="date" id="expiry">
-      </div>
-      <a href="#" class="btn btn-outline" onclick="saveInfo(); return false;">Сохранить реквизиты</a>
+      <div class="info-item"><div class="info-label">ФИО</div><input type="text" id="fio"></div>
+      <div class="info-item"><div class="info-label">ИИН</div><input type="text" id="iin"></div>
+      <div class="info-item"><div class="info-label">Дата рождения</div><input type="date" id="dob"></div>
+      <div class="info-item"><div class="info-label">Номер документа</div><input type="text" id="docnum"></div>
+      <div class="info-item"><div class="info-label">Дата выдачи</div><input type="date" id="issued"></div>
+      <div class="info-item"><div class="info-label">Срок действия</div><input type="date" id="expiry"></div>
+      <a href="#" class="btn btn-outline" onclick="finalize(); return false;">Сохранить</a>
     </form>
-    <div id="savedData" style="margin-top:20px;"></div>
+    <div id="finalInfo" style="display:none;"></div>
   </div>
 
   <script>
@@ -174,13 +161,14 @@
         const reader = new FileReader();
         reader.onload = e => {
           docPhoto.src = e.target.result;
+          document.getElementById("docButtons").style.display = "block";
         };
         reader.readAsDataURL(file);
       }
     });
 
-    // Сохранение реквизитов
-    function saveInfo() {
+    // Финализация (показ как айфон-версия)
+    function finalize() {
       const fio = document.getElementById("fio").value;
       const iin = document.getElementById("iin").value;
       const dob = document.getElementById("dob").value;
@@ -188,16 +176,30 @@
       const issued = document.getElementById("issued").value;
       const expiry = document.getElementById("expiry").value;
 
-      let out = `
-        <h3 style="font-size:18px; margin-bottom:10px;">Сохранённые данные</h3>
-        <p><b>ФИО:</b> ${fio}</p>
-        <p><b>ИИН:</b> ${iin}</p>
-        <p><b>Дата рождения:</b> ${dob}</p>
-        <p><b>Номер документа:</b> ${docnum}</p>
-        <p><b>Дата выдачи:</b> ${issued}</p>
-        <p><b>Срок действия:</b> ${expiry}</p>
+      if (!fio || !iin || !dob || !docnum || !issued || !expiry || !docPhoto.src) {
+        alert("Заполните все поля и загрузите фото документа!");
+        return;
+      }
+
+      // скрываем форму
+      document.getElementById("infoForm").style.display = "none";
+      const final = document.getElementById("finalInfo");
+      final.style.display = "block";
+      final.innerHTML = `
+        <div class="info-item"><div class="info-label">ФИО</div>
+          <div class="info-value">${fio}<img src="copy-icon.png" class="copy-icon"></div></div>
+        <div class="info-item"><div class="info-label">ИИН</div>
+          <div class="info-value">${iin}<img src="copy-icon.png" class="copy-icon"></div></div>
+        <div class="info-item"><div class="info-label">Дата рождения</div>
+          <div class="info-value">${dob}<img src="copy-icon.png" class="copy-icon"></div></div>
+        <div class="info-item"><div class="info-label">Номер документа</div>
+          <div class="info-value">${docnum}<img src="copy-icon.png" class="copy-icon"></div></div>
+        <div class="info-item"><div class="info-label">Дата выдачи</div>
+          <div class="info-value">${issued}<img src="copy-icon.png" class="copy-icon"></div></div>
+        <div class="info-item"><div class="info-label">Срок действия</div>
+          <div class="info-value">${expiry}<img src="copy-icon.png" class="copy-icon"></div></div>
+        <a href="#" class="btn btn-outline">Отправить реквизиты</a>
       `;
-      document.getElementById("savedData").innerHTML = out;
     }
   </script>
 </body>
