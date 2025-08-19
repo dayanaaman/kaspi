@@ -4,26 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Удостоверение личности</title>
-  <meta name="theme-color" content="#ffffff" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="kaspi_icon.png" />
-  <link rel="apple-touch-icon" href="kaspi_icon.png" />
   <style>
     body {
       margin: 0;
-      font-family: sans-serif;
-      background-color: #fff; /* белый фон */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: #fff;
       color: #000;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
-
     header {
-      background-color: #fff;
-      padding: 14px;
-      font-weight: bold;
+      background-color: #f9f9f9;
+      padding: 12px 0;
       text-align: center;
-      font-size: 16px;
-      border-bottom: 1px solid #ddd;
+      font-size: 17px;
+      font-weight: 600;
+      border-bottom: 0.5px solid #ccc;
       position: relative;
     }
 
@@ -32,71 +29,52 @@
       left: 16px;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 18px;
+      font-size: 20px;
+      font-weight: 400;
+      color: #007aff;
       cursor: pointer;
     }
 
     .tabs {
-      position: relative;
       display: flex;
-      background: #ecebeb;     /* серый фон */
+      justify-content: center;
+      margin: 16px auto;
+      width: 90%;
+      background: #f2f2f7;
       border-radius: 10px;
       padding: 4px;
-      width: 340px;
-      margin: 20px auto;       /* центрируем */
     }
 
     .tab {
       flex: 1;
-      padding: 5px 0;
       text-align: center;
-      z-index: 2;              /* вкладки поверх селектора */
-      cursor: pointer;
-      color: #333;
+      padding: 6px 0;
+      font-size: 15px;
       font-weight: 500;
-      font-size: 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #007aff;
+      transition: background 0.3s, color 0.3s;
     }
 
     .tab.active {
-      color: black;
+      background: #fff;
+      color: #000;
+      font-weight: 600;
     }
-
-    .tab-selector {
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: calc(50% - 2px); /* половина ширины контейнера */
-      height: calc(100% - 4px);
-      background: white;
-      border-radius: 7px;
-      transition: transform 0.3s ease;
-      z-index: 1;
-    }
-
-
-    /* если активна 2-я вкладка */
-    .tab:nth-child(2).active ~ ::before {
-      left: calc(33.33% + 3px);
-    }
-
-    /* если активна 3-я вкладка */
-    .tab:nth-child(3).active ~ ::before {
-      left: calc(66.66% + 3px);
-    }
-
 
     .content {
       padding: 0;
       background-color: #fff;
-      min-height: calc(100vh - 140px);
+      min-height: calc(100vh - 120px);
     }
 
     .photo-container {
       width: 100%;
-      height: 520px;
+      height: 500px;
       overflow: hidden;
-      touch-action: none;
       position: relative;
+      touch-action: none;
     }
 
     .photo {
@@ -107,77 +85,59 @@
       height: 100%;
       object-fit: contain;
       transform-origin: center center;
+      transition: transform 0.2s ease-out;
     }
-
-    .info-label {
-      font-weight: ;
-      margin-top: 5px;
-      font-size: 12px;
-      color: #817f7f;
-    }
-
-    .info-value {
-      display: flex;            /* горизонтальное расположение текста и иконки */
-      align-items: center;      /* вертикальное выравнивание по центру */
-      justify-content: space-between; /* текст слева, иконка справа */
-      font-size: 16px;
-      margin-bottom: 6px;
-    }
-
-    .copy-icon {
-    width: 20px;     /* размер иконки */
-    height: 20px;
-    cursor: pointer; /* курсор при наведении */
-  }
 
     .btn {
       display: block;
-      width: 85%;
-      margin: 12px auto;
-      padding: 18px;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 16px;
+      width: 90%;
+      margin: 10px auto;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 500;
       text-align: center;
       text-decoration: none;
     }
 
     .btn-primary {
-      background-color: #2c74e0;
+      background-color: #007aff;
       color: white;
     }
 
     .btn-outline {
-      border: 1.5px solid #9abff1;
-      color: #2c74e0;
+      border: 1px solid #c7c7cc;
+      color: #007aff;
       background-color: white;
     }
+
     .btn-icon {
-      width: 20px;       /* размер иконки */
-      height: 20px;
-      vertical-align: middle ;
-      margin-right: 1px; /* отступ справа от иконки */
+      width: 18px;
+      height: 18px;
+      vertical-align: middle;
+      margin-right: 4px;
     }
+
     .modal {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0); /* прозрачный фон по умолчанию */
+      background: rgba(0,0,0,0);
       z-index: 1000;
-      pointer-events: none; /* чтобы клики проходили, пока не показано */
+      pointer-events: none;
       transition: background 0.3s ease;
     }
 
     .modal.show {
-      background: rgba(0,0,0,0.4); /* затемнение фона */
+      background: rgba(0,0,0,0.4);
       pointer-events: auto;
     }
 
     .modal-content {
       position: absolute;
-      bottom: -50%; /* изначально скрыто ниже экрана */
+      bottom: -60%;
       width: 100%;
       height: 50%;
       background-color: #fff;
@@ -185,94 +145,70 @@
       border-top-right-radius: 20px;
       padding: 20px;
       box-sizing: border-box;
-      overflow-y: auto;
-      transition: bottom 0.1s ease;
+      transition: bottom 0.3s ease;
     }
 
     .modal.show .modal-content {
-      bottom: 0; /* выезжает вверх */
+      bottom: 0;
     }
 
     .close {
       position: absolute;
-      right: 16px;
-      top: 16px;
-      font-size: 24px;
+      right: 20px;
+      top: 12px;
+      font-size: 26px;
+      color: #888;
       cursor: pointer;
     }
 
-
-
-
     #info {
-      display: none; /* скрыт по умолчанию */
+      display: none;
       padding: 20px;
-      background-color: #fff;
-      min-height: calc(100vh - 100px);
-      flex-direction: column;
-      justify-content: space-between;
     }
 
+    .info-item {
+      margin-bottom: 14px;
+    }
+
+    .info-label {
+      font-size: 13px;
+      color: #8e8e93;
+      margin-bottom: 2px;
+    }
+
+    .info-value {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 16px;
+    }
+
+    .copy-icon {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      opacity: 0.6;
+    }
   </style>
 </head>
 <body>
   <header>
-    <div class="back-arrow" onclick="window.history.back()">←</div>
+    <div class="back-arrow" onclick="window.history.back()">‹</div>
     Удостоверение личности
   </header>
+
   <div class="tabs">
-    <div class="tab-selector" id="selector"></div>
-    <div class="tab" onclick="showTab('doc')">Документ</div>
+    <div class="tab active" onclick="showTab('doc')">Документ</div>
     <div class="tab" onclick="showTab('info')">Реквизиты</div>
   </div>
-  
-
 
   <div id="doc" class="content">
     <div class="photo-container" id="photoContainer">
       <img src="5194971353961328439.jpg" alt="Документ" class="photo" id="zoomable" />
     </div>
-    <a href="#" class="btn btn-primary">
-      <img src="icon.png" alt="" class="btn-icon">
-      Предъявить документ
-    </a>
-    
-    <a href="#" class="btn btn-outline">
-      <img src="imgbin.png" alt="" class="btn-icon">
-      Отправить документ
-    </a>
-    <div id="modal" class="modal">
-      <div class="modal-content">
-              <span class="close" onclick="closeModal()">×</span>
-          
-              <!-- Верхняя надпись слева -->
-              <div style="text-align: left; font-weight: bold; font-size: 18px; margin-bottom: 20px;">
-                Удостоверение личности
-              </div>
-          
-              <!-- Подпись по центру -->
-              <div style="text-align: center; font-weight: normal; font-size: 14px; margin-bottom: 20px;">
-                Покажите QR-код сотруднику
-              </div>
-          
-              <!-- Картинка по центру -->
-              <div style="text-align: center; margin-bottom: 15px;">
-                <img src="QR.png" alt="QR Code" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;">
-              </div>
-          
-              <!-- Подпись ниже картинки -->
-              <div style="text-align: center; font-weight: normal; font-size: 14px; margin-bottom: 10px;">
-                или скажите код
-              </div>
-          
-              <!-- Сам код крупным жирным шрифтом -->
-              <div style="text-align: center; font-weight: bold; font-size: 24px;">
-                803558
-            </div>
-          </div>
-        </div>
-      </div>
-      
+    <a href="#" class="btn btn-primary">Предъявить документ</a>
+    <a href="#" class="btn btn-outline">Отправить документ</a>
+  </div>
 
   <div id="info" class="content">
     <div class="info-item">
@@ -282,7 +218,6 @@
         <img src="copy-icon.png" class="copy-icon" />
       </div>
     </div>
-    
     <div class="info-item">
       <div class="info-label">ИИН</div>
       <div class="info-value">
@@ -290,7 +225,6 @@
         <img src="copy-icon.png" class="copy-icon" />
       </div>
     </div>
-    
     <div class="info-item">
       <div class="info-label">Дата рождения</div>
       <div class="info-value">
@@ -298,7 +232,6 @@
         <img src="copy-icon.png" class="copy-icon" />
       </div>
     </div>
-    
     <div class="info-item">
       <div class="info-label">Номер документа</div>
       <div class="info-value">
@@ -306,7 +239,6 @@
         <img src="copy-icon.png" class="copy-icon" />
       </div>
     </div>
-    
     <div class="info-item">
       <div class="info-label">Дата выдачи</div>
       <div class="info-value">
@@ -314,7 +246,6 @@
         <img src="copy-icon.png" class="copy-icon" />
       </div>
     </div>
-    
     <div class="info-item">
       <div class="info-label">Срок действия</div>
       <div class="info-value">
@@ -322,28 +253,37 @@
         <img src="copy-icon.png" class="copy-icon" />
       </div>
     </div>
-    
     <a href="#" class="btn btn-outline">Отправить реквизиты</a>
+  </div>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">×</span>
+      <div style="text-align: center; font-weight: 600; font-size: 18px; margin-bottom: 20px;">
+        Удостоверение личности
+      </div>
+      <div style="text-align: center; font-size: 15px; margin-bottom: 20px;">
+        Покажите QR-код сотруднику
+      </div>
+      <div style="text-align: center; margin-bottom: 15px;">
+        <img src="QR.png" alt="QR Code" style="width: 160px; height: 160px; border-radius: 12px;">
+      </div>
+      <div style="text-align: center; font-size: 15px; margin-bottom: 8px;">
+        или скажите код
+      </div>
+      <div style="text-align: center; font-weight: 700; font-size: 26px;">
+        803558
+      </div>
+    </div>
   </div>
 
   <script>
     function showTab(id) {
       document.getElementById('doc').style.display = id === 'doc' ? 'block' : 'none';
-      document.getElementById('info').style.display = id === 'info' ? 'flex' : 'none';
+      document.getElementById('info').style.display = id === 'info' ? 'block' : 'none';
 
-      const selector = document.getElementById('selector');
-      selector.style.transform = id === 'doc' ? 'translateX(0%)' : 'translateX(100%)';
-
-      const tabs = document.querySelectorAll('.tab');
-      tabs.forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
       document.querySelector(`.tab[onclick="showTab('${id}')"]`).classList.add('active');
-    }
-
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js').then(() => {
-        console.log("Service Worker registered");
-      });
     }
 
     const img = document.getElementById("zoomable");
@@ -353,7 +293,6 @@
     let posX = 0, posY = 0;
     let lastX = 0, lastY = 0;
     let isDragging = false;
-
     let startDist = 0;
 
     container.addEventListener("touchstart", function (e) {
@@ -378,13 +317,12 @@
           e.touches[0].clientY - e.touches[1].clientY
         );
         scale = Math.min(3, Math.max(1, lastScale * (newDist / startDist)));
-        img.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
       } else if (e.touches.length === 1 && isDragging) {
         e.preventDefault();
         posX = e.touches[0].clientX - lastX;
         posY = e.touches[0].clientY - lastY;
-        img.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
       }
+      img.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
     });
 
     container.addEventListener("touchend", function (e) {
@@ -393,28 +331,33 @@
       }
     });
 
+    container.addEventListener("dblclick", () => {
+      scale = 1; posX = 0; posY = 0;
+      img.style.transform = "translate(0,0) scale(1)";
+    });
 
     const modal = document.getElementById("modal");
-
-    function openModal() {
-      modal.style.display = "block"; // сначала делаем видимым
-      setTimeout(() => modal.classList.add("show"), 8); // запускаем анимацию через 10мс
-    }
+    document.querySelector(".btn-primary").addEventListener("click", function(e){
+      e.preventDefault();
+      modal.style.display = "block";
+      setTimeout(() => modal.classList.add("show"), 10);
+    });
 
     function closeModal() {
       modal.classList.remove("show");
-      setTimeout(() => modal.style.display = "none", 300); // скрываем после окончания анимации
+      setTimeout(() => modal.style.display = "none", 300);
     }
 
-    document.querySelector(".btn-primary").addEventListener("click", function(e){
-      e.preventDefault();
-      openModal();
+    document.querySelectorAll(".copy-icon").forEach(icon => {
+      icon.addEventListener("click", () => {
+        const value = icon.parentElement.childNodes[0].textContent.trim();
+        navigator.clipboard.writeText(value).then(() => {
+          alert("Скопировано: " + value);
+        });
+      });
     });
 
-
-
+    document.addEventListener("DOMContentLoaded", () => showTab("doc"));
   </script>
 </body>
 </html>
-
-
