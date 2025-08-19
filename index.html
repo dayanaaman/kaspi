@@ -200,8 +200,85 @@
           <div class="info-value">${expiry}<img src="copy-icon.png" class="copy-icon"></div></div>
         <a href="#" class="btn btn-outline">Отправить реквизиты</a>
       `;
+
+      
     }
   </script>
+  <div id="doc" class="content">
+  <div class="photo-container" id="photoContainer">
+    <img src="5194971353961328439.jpg" alt="Документ" class="photo" id="zoomable" />
+  </div>
+
+  <!-- Кнопки -->
+  <a href="#" class="btn btn-primary" onclick="openModal()">
+    <img src="icon.png" alt="" class="btn-icon" style="width:18px; vertical-align:middle; margin-right:6px;">
+    Предъявить документ
+  </a>
+  
+  <a href="#" class="btn btn-outline">
+    <img src="imgbin.png" alt="" class="btn-icon" style="width:18px; vertical-align:middle; margin-right:6px;">
+    Отправить документ
+  </a>
+</div>
+
+<!-- Модальное окно -->
+<div id="modal" class="modal" style="display:none;">
+  <div class="modal-content" style="
+    background:#fff;
+    border-radius:20px;
+    padding:20px;
+    width:85%;
+    max-width:350px;
+    margin:100px auto;
+    box-shadow:0 10px 25px rgba(0,0,0,0.3);
+    position:relative;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+    
+    <span class="close" onclick="closeModal()" style="
+      position:absolute;
+      right:15px;
+      top:10px;
+      font-size:28px;
+      cursor:pointer;
+      color:#aaa;">×</span>
+    
+    <!-- Верхняя надпись -->
+    <div style="text-align:left; font-weight:600; font-size:18px; margin-bottom:20px;">
+      Удостоверение личности
+    </div>
+    
+    <!-- Подпись -->
+    <div style="text-align:center; font-size:14px; margin-bottom:20px;">
+      Покажите QR-код сотруднику
+    </div>
+    
+    <!-- QR-код -->
+    <div style="text-align:center; margin-bottom:15px;">
+      <img src="QR.png" alt="QR Code" style="width:150px; height:150px; border-radius:10px;">
+    </div>
+    
+    <!-- Подпись -->
+    <div style="text-align:center; font-size:14px; margin-bottom:10px;">
+      или скажите код
+    </div>
+    
+    <!-- Код -->
+    <div style="text-align:center; font-weight:bold; font-size:26px; letter-spacing:2px;">
+      803558
+    </div>
+  </div>
+</div>
+
+<script>
+function openModal() {
+  document.getElementById("modal").style.display = "block";
+}
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+}
+</script>
+
 </body>
 </html>
+
 
