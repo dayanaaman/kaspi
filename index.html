@@ -1,202 +1,99 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Удостоверение личности</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Документы</title>
   <style>
     body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background-color: #fff;
+      background: #f9f9f9;
       color: #000;
-    }
-    header {
-      background-color: #f9f9f9;
-      padding: 12px 0;
-      text-align: center;
-      font-size: 17px;
-      font-weight: 600;
-      border-bottom: 0.5px solid #ccc;
-      position: relative;
-    }
-    .back-arrow {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 20px;
-      font-weight: 400;
-      color: #007aff;
-      cursor: pointer;
     }
     .tabs {
       display: flex;
-      justify-content: center;
-      margin: 16px auto;
-      width: 90%;
-      background: #f2f2f7;
-      border-radius: 10px;
-      padding: 4px;
+      justify-content: space-around;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
     }
     .tab {
       flex: 1;
+      padding: 12px;
       text-align: center;
-      padding: 6px 0;
-      font-size: 15px;
-      font-weight: 500;
-      border-radius: 8px;
       cursor: pointer;
-      color: #000; /* теперь всегда черный */
+      color: #000; /* всегда чёрный */
     }
     .tab.active {
-      background: #fff;
-      font-weight: 600;
+      font-weight: bold;
+      border-bottom: 2px solid #007aff;
     }
     .content {
-      padding: 20px;
-      background-color: #fff;
-      min-height: calc(100vh - 120px);
+      padding: 15px;
     }
-    .photo-container {
+    .photo-container img {
       width: 100%;
-      height: 400px;
-      overflow: hidden;
-      position: relative;
-      touch-action: none;
       border-radius: 12px;
-      margin-bottom: 10px;
-    }
-    .photo {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      object-fit: contain;
     }
     .btn {
-      display: block;
-      width: 90%;
-      margin: 10px auto;
-      padding: 14px;
-      border-radius: 12px;
-      font-size: 17px;
-      font-weight: 500;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
       text-decoration: none;
     }
-    .btn-primary { background: #007aff; color: #fff; }
-    .btn-outline { border: 1px solid #c7c7cc; color: #007aff; background: #fff; }
-    input[type="file"], input[type="text"], input[type="date"] {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      margin-bottom: 14px;
-      box-sizing: border-box;
+    .btn-primary {
+      background: #007aff;
+      color: #fff;
     }
-    .info-item { margin-bottom: 14px; }
-    .info-label { font-size: 13px; color: #8e8e93; margin-bottom: 4px; }
-    .info-value { font-size: 16px; display:flex; justify-content:space-between; align-items:center; }
-    .copy-icon { width:20px; height:20px; cursor:pointer; opacity:0.6; }
-
-    /* Стили модалки снизу */
-    .modal {
+    .btn-outline {
+      border: 1px solid #007aff;
+      color: #007aff;
+    }
+    .btn img {
+      width: 20px;
+      margin-right: 8px;
+    }
+    /* Фон модалки */
+    #modalBg {
       display: none;
       position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.2);
+      z-index: 999;
+    }
+    /* Сама модалка снизу */
+    .modal {
+      position: fixed;
+      bottom: -100%;
+      left: 0;
+      width: 100%;
+      height: 45%;
+      background: #fff;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+      transition: bottom 0.3s ease;
       z-index: 1000;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.4);
-      justify-content: flex-end; /* контейнер внизу */
     }
-    .modal.show { display: flex; }
-    .modal-content {
-      background:#fff;
-      border-radius:20px 20px 0 0;
-      padding:20px;
-      width:100%;
-      max-width:500px;
-      margin:0 auto;
-      box-shadow:0 -4px 20px rgba(0,0,0,0.2);
-      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-      transform: translateY(100%);
-      transition: transform 0.3s ease-out;
+    .modal.show {
+      bottom: 0;
     }
-    .modal.show .modal-content {
-      transform: translateY(0); /* анимация выезда снизу */
-    }
-    .close {
-      position:absolute;
-      right:15px;
-      top:10px;
-      font-size:28px;
-      cursor:pointer;
-      color:#aaa;
+    .modal .close {
+      font-size: 22px;
+      float: right;
+      cursor: pointer;
     }
   </style>
-  <style>
-  /* Затемнение позади */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.1); /* лёгкое затемнение */
-    justify-content: flex-end; /* модалка снизу */
-  }
-  .modal.show { display: flex; }
-
-  /* Контент снизу */
-  .modal-content {
-    background:#fff;
-    border-radius:20px 20px 0 0;
-    padding:20px;
-    width:100%;
-    max-width:500px;
-    height:45vh; /* 45% экрана */
-    margin:0 auto;
-    box-shadow:0 -4px 20px rgba(0,0,0,0.2);
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-    transform: translateY(100%);
-    transition: transform 0.3s ease-out;
-    position: relative;
-    touch-action: none;
-  }
-  .modal.show .modal-content {
-    transform: translateY(0);
-  }
-
-  /* Кнопка закрытия */
-  .close {
-    position:absolute;
-    right:15px;
-    top:10px;
-    font-size:28px;
-    cursor:pointer;
-    color:#aaa;
-  }
-
-  /* Полоска сверху */
-  .modal-content::before {
-    content:"";
-    display:block;
-    width:40px;
-    height:4px;
-    background:#ccc;
-    border-radius:2px;
-    margin:0 auto 10px auto;
-  }
-</style>
 </head>
 <body>
-  <header>
-    <div class="back-arrow" onclick="window.history.back()">‹</div>
-    Удостоверение личности
-  </header>
 
+  <!-- Вкладки -->
   <div class="tabs">
     <div class="tab active" onclick="showTab('doc')">Документ</div>
     <div class="tab" onclick="showTab('info')">Реквизиты</div>
@@ -204,43 +101,66 @@
 
   <!-- Документ -->
   <div id="doc" class="content">
-    <div id="uploadSection">
-      <div class="photo-container" id="photoContainer">
-        <img src="" alt="Документ" class="photo" id="documentPhoto" />
-      </div>
-      <input type="file" id="uploadPhoto" accept="image/*">
+    <input type="file" id="uploadPhoto" accept="image/*">
+    <div class="photo-container">
+      <img id="documentPhoto" src="" alt="Документ">
     </div>
     <div id="docButtons" style="display:none;">
-      <a href="#" class="btn btn-primary" onclick="openModal()">Предъявить документ</a>
-      <a href="#" class="btn btn-outline">Отправить документ</a>
+      <a href="#" class="btn btn-primary" onclick="openModal()">
+        <img src="icon.png" alt="">Предъявить документ
+      </a>
+      <a href="#" class="btn btn-outline">
+        <img src="imgbin.png" alt="">Отправить документ
+      </a>
     </div>
   </div>
 
   <!-- Реквизиты -->
-  <div id="info" class="content" style="display: none;">
-    <form id="infoForm">
-      <div class="info-item"><div class="info-label">ФИО</div><input type="text" id="fio"></div>
-      <div class="info-item"><div class="info-label">ИИН</div><input type="text" id="iin"></div>
-      <div class="info-item"><div class="info-label">Дата рождения</div><input type="date" id="dob"></div>
-      <div class="info-item"><div class="info-label">Номер документа</div><input type="text" id="docnum"></div>
-      <div class="info-item"><div class="info-label">Дата выдачи</div><input type="date" id="issued"></div>
-      <div class="info-item"><div class="info-label">Срок действия</div><input type="date" id="expiry"></div>
-      <a href="#" class="btn btn-outline" onclick="finalize(); return false;">Сохранить</a>
-    </form>
-    <div id="finalInfo" style="display:none;"></div>
+  <div id="info" class="content" style="display:none;">
+    <!-- Форма -->
+    <div id="infoForm">
+      <input id="fio" placeholder="ФИО"><br><br>
+      <input id="iin" placeholder="ИИН"><br><br>
+      <label>Дата рождения:</label><br>
+      <input id="dob" type="date"><br><br>
+      <input id="docnum" placeholder="Номер документа"><br><br>
+      <label>Дата выдачи:</label><br>
+      <input id="issued" type="date"><br><br>
+      <label>Срок действия:</label><br>
+      <input id="expiry" type="date"><br><br>
+      <button onclick="finalize()">Сохранить</button>
+    </div>
+
+    <!-- Готовый документ -->
+    <div id="infoView" style="display:none; text-align:left; font-size:16px; line-height:1.6;">
+      <p><b>ФИО:</b> <span id="viewFio"></span></p>
+      <p><b>ИИН:</b> <span id="viewIin"></span></p>
+      <p><b>Дата рождения:</b> <span id="viewDob"></span></p>
+      <p><b>Номер документа:</b> <span id="viewDocnum"></span></p>
+      <p><b>Дата выдачи:</b> <span id="viewIssued"></span></p>
+      <p><b>Срок действия:</b> <span id="viewExpiry"></span></p>
+      <button onclick="editInfo()">Редактировать</button>
+    </div>
   </div>
 
-  <!-- Модалка -->
+  <!-- Фон и модалка -->
+  <div id="modalBg" onclick="closeModal()"></div>
   <div id="modal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">×</span>
-      <div style="text-align:left; font-weight:600; font-size:18px; margin-bottom:20px;">Удостоверение личности</div>
-      <div style="text-align:center; font-size:14px; margin-bottom:20px;">Покажите QR-код сотруднику</div>
-      <div style="text-align:center; margin-bottom:15px;">
-        <img src="QR.png" alt="QR Code" style="width:150px; height:150px; border-radius:10px;">
-      </div>
-      <div style="text-align:center; font-size:14px; margin-bottom:10px;">или скажите код</div>
-      <div style="text-align:center; font-weight:bold; font-size:26px; letter-spacing:2px;">803558</div>
+    <span class="close" onclick="closeModal()">×</span>
+    <div style="text-align:left;font-weight:bold;font-size:18px;margin-bottom:20px;">
+      Удостоверение личности
+    </div>
+    <div style="text-align:center;font-size:14px;margin-bottom:20px;">
+      Покажите QR-код сотруднику
+    </div>
+    <div style="text-align:center;margin-bottom:15px;">
+      <img src="QR.png" alt="QR Code" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+    </div>
+    <div style="text-align:center;font-size:14px;margin-bottom:10px;">
+      или скажите код
+    </div>
+    <div style="text-align:center;font-weight:bold;font-size:24px;">
+      803558
     </div>
   </div>
 
@@ -253,7 +173,39 @@
       document.querySelector(`.tab[onclick="showTab('${id}')"]`).classList.add('active');
     }
 
-    // Загрузка фото
+    // Формат даты
+    function formatDate(dateStr) {
+      if (!dateStr) return "";
+      const d = new Date(dateStr);
+      if (isNaN(d)) return dateStr;
+      let day = String(d.getDate()).padStart(2, '0');
+      let month = String(d.getMonth() + 1).padStart(2, '0');
+      let year = d.getFullYear();
+      return `${day}.${month}.${year}`;
+    }
+
+    // Сохранение реквизитов
+    function finalize() {
+      ["fio","iin","dob","docnum","issued","expiry"].forEach(id=>{
+        const val = document.getElementById(id).value;
+        if(val) localStorage.setItem(id,val);
+      });
+      document.getElementById("viewFio").textContent = localStorage.getItem("fio") || "";
+      document.getElementById("viewIin").textContent = localStorage.getItem("iin") || "";
+      document.getElementById("viewDob").textContent = formatDate(localStorage.getItem("dob"));
+      document.getElementById("viewDocnum").textContent = localStorage.getItem("docnum") || "";
+      document.getElementById("viewIssued").textContent = formatDate(localStorage.getItem("issued"));
+      document.getElementById("viewExpiry").textContent = formatDate(localStorage.getItem("expiry"));
+      document.getElementById("infoForm").style.display="none";
+      document.getElementById("infoView").style.display="block";
+    }
+
+    function editInfo() {
+      document.getElementById("infoForm").style.display="block";
+      document.getElementById("infoView").style.display="none";
+    }
+
+    // Фото
     const upload = document.getElementById("uploadPhoto");
     const docPhoto = document.getElementById("documentPhoto");
     upload.addEventListener("change", function() {
@@ -262,102 +214,42 @@
         const reader = new FileReader();
         reader.onload = e => {
           docPhoto.src = e.target.result;
+          localStorage.setItem("documentPhoto", e.target.result);
           document.getElementById("docButtons").style.display = "block";
-          upload.style.display = "none"; // скрываем загрузчик после выбора
+          upload.style.display = "none";
         };
         reader.readAsDataURL(file);
       }
     });
 
-    // Преобразуем дату в формат DD.MM.YYYY
-    function formatDate(input) {
-      if (!input) return "";
-      const [year, month, day] = input.split("-");
-      return `${day}.${month}.${year}`;
-    }
-
-    // Финализация
-    function finalize() {
-      const fio = document.getElementById("fio").value;
-      const iin = document.getElementById("iin").value;
-      const dob = formatDate(document.getElementById("dob").value);
-      const docnum = document.getElementById("docnum").value;
-      const issued = formatDate(document.getElementById("issued").value);
-      const expiry = formatDate(document.getElementById("expiry").value);
-
-      if (!fio || !iin || !dob || !docnum || !issued || !expiry || !docPhoto.src) {
-        alert("Заполните все поля и загрузите фото документа!");
-        return;
+    // При загрузке страницы
+    window.onload = function() {
+      const savedPhoto = localStorage.getItem("documentPhoto");
+      if (savedPhoto) {
+        docPhoto.src = savedPhoto;
+        document.getElementById("docButtons").style.display = "block";
+        upload.style.display = "none";
       }
-
-      document.getElementById("infoForm").style.display = "none";
-      const final = document.getElementById("finalInfo");
-      final.style.display = "block";
-      final.innerHTML = `
-        <div class="info-item"><div class="info-label">ФИО</div><div class="info-value">${fio}</div></div>
-        <div class="info-item"><div class="info-label">ИИН</div><div class="info-value">${iin}</div></div>
-        <div class="info-item"><div class="info-label">Дата рождения</div><div class="info-value">${dob}</div></div>
-        <div class="info-item"><div class="info-label">Номер документа</div><div class="info-value">${docnum}</div></div>
-        <div class="info-item"><div class="info-label">Дата выдачи</div><div class="info-value">${issued}</div></div>
-        <div class="info-item"><div class="info-label">Срок действия</div><div class="info-value">${expiry}</div></div>
-        <a href="#" class="btn btn-outline">Отправить реквизиты</a>
-      `;
-    }
+      let saved = false;
+      ["fio","iin","dob","docnum","issued","expiry"].forEach(id=>{
+        let val = localStorage.getItem(id);
+        if(val){
+          document.getElementById(id).value = val;
+          saved = true;
+        }
+      });
+      if(saved) finalize();
+    };
 
     // Модалка
     function openModal() {
+      document.getElementById("modalBg").style.display="block";
       document.getElementById("modal").classList.add("show");
     }
     function closeModal() {
+      document.getElementById("modalBg").style.display="none";
       document.getElementById("modal").classList.remove("show");
     }
-    // Закрытие по клику вне модалки
-    window.onclick = function(event) {
-      const modal = document.getElementById("modal");
-      if (event.target === modal) {
-        closeModal();
-      }
-    }
   </script>
-  <script>
-  let startY = 0, currentY = 0, dragging = false;
-
-  function openModal() {
-    const modal = document.getElementById("modal");
-    modal.classList.add("show");
-  }
-
-  function closeModal() {
-    const modal = document.getElementById("modal");
-    modal.classList.remove("show");
-  }
-
-  // Свайп вниз для закрытия
-  const modalContent = document.querySelector(".modal-content");
-  modalContent.addEventListener("touchstart", e => {
-    startY = e.touches[0].clientY;
-    dragging = true;
-    modalContent.style.transition = "none";
-  });
-
-  modalContent.addEventListener("touchmove", e => {
-    if (!dragging) return;
-    currentY = e.touches[0].clientY;
-    let diff = currentY - startY;
-    if (diff > 0) {
-      modalContent.style.transform = `translateY(${diff}px)`;
-    }
-  });
-
-  modalContent.addEventListener("touchend", () => {
-    dragging = false;
-    modalContent.style.transition = "transform 0.3s ease-out";
-    if (currentY - startY > 100) { 
-      closeModal();
-    } else {
-      modalContent.style.transform = "translateY(0)";
-    }
-  });
-</script>
 </body>
 </html>
