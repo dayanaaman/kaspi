@@ -1,7 +1,7 @@
 {
-  "name": "Удостоверение личности",
-  "short_name": "ID",
-  "start_url": "./",
+  "name": "Kaspi ID",
+  "short_name": "Kaspi",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
@@ -12,7 +12,7 @@
       "type": "image/png"
     },
     {
-      "src": "icon.png",
+      "src": "kaspi_icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
