@@ -7,12 +7,12 @@
   "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "kaspi.png",
+      "src": "kaspi_icon.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "kaspi.png",
+      "src": "kaspi_icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
