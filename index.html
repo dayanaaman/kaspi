@@ -216,3 +216,43 @@
     });
 
     // Преобразуем дату в формат DD.MM.YYYY
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      return ("0"+d.getDate()).slice(-2) + "." + ("0"+(d.getMonth()+1)).slice(-2) + "." + d.getFullYear();
+    }
+
+    // Сохранение реквизитов
+    function finalize() {
+      const fio = document.getElementById("fio").value;
+      const iin = document.getElementById("iin").value;
+      const dob = formatDate(document.getElementById("dob").value);
+      const docnum = document.getElementById("docnum").value;
+      const issued = formatDate(document.getElementById("issued").value);
+      const expiry = formatDate(document.getElementById("expiry").value);
+      const finalDiv = document.getElementById("finalInfo");
+      finalDiv.innerHTML = `
+        <div>ФИО: ${fio}</div>
+        <div>ИИН: ${iin}</div>
+        <div>Дата рождения: ${dob}</div>
+        <div>Номер документа: ${docnum}</div>
+        <div>Дата выдачи: ${issued}</div>
+        <div>Срок действия: ${expiry}</div>
+      `;
+      finalDiv.style.display = "block";
+      document.getElementById("infoForm").style.display = "none";
+    }
+
+    // Модалка
+    function openModal() {
+      document.getElementById("modal").classList.add("show");
+    }
+    function closeModal() {
+      document.getElementById("modal").classList.remove("show");
+    }
+    window.onclick = function(event) {
+      const modal = document.getElementById("modal");
+      if (event.target === modal) closeModal();
+    }
+  </script>
+</body>
+</html>
